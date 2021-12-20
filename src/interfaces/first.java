@@ -30,7 +30,6 @@ public class first extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
     }
 
-    inicio i = new inicio();
 
     /**
      * This method is called from within the constructor to initialize the form.
