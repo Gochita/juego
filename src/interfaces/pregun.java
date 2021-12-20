@@ -259,7 +259,7 @@ public class pregun extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        if (ronda <= 5) {
+        if (ronda != 5) {
             try {
                 if (rbtn1.isSelected()) {
                     if (rbtn1.getText().equals(respuestaCorrecta)) {
@@ -363,19 +363,23 @@ public class pregun extends javax.swing.JFrame {
             } catch (Exception e) {
             }
         } else {
-            lblNroRonda.setText("5");
-            JOptionPane.showMessageDialog(null, "Felicitaciones!");
-            Jugador jugador = new Jugador();
-            Ronda rond = new Ronda();
-            rond.setIdRonda(5);
-            jugador.setEstadoJugador(1);
-            jugador.setNombreJugador(lblNom.getText());
-            jugador.setIdRonda(rond);
-            jugador.setAcumuladoPremio(acum);
-            controller.create(jugador);
-            historico h = new historico();
-            h.setVisible(true);
-            this.dispose();
+            try {
+                lblNroRonda.setText("5");
+                JOptionPane.showMessageDialog(null, "Felicitaciones!");
+                historico h = new historico();
+                h.setVisible(true);
+                Jugador jugador = new Jugador();
+                Ronda rond = new Ronda();
+                rond.setIdRonda(5);
+                jugador.setEstadoJugador(1);
+                jugador.setNombreJugador(lblNom.getText());
+                jugador.setIdRonda(rond);
+                jugador.setAcumuladoPremio(5000);
+                controller.create(jugador);
+                this.dispose();
+            } catch (Exception e) {
+            }
+
         }
 
     }//GEN-LAST:event_jButton1ActionPerformed
