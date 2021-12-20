@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controlador;
+package controladores;
 
-import controlador.exceptions.NonexistentEntityException;
+import controladores.exceptions.NonexistentEntityException;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -16,7 +16,7 @@ import javax.persistence.Persistence;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import modelo.Jugador;
-import modelo.Premio;
+import modelo.Ronda;
 
 /**
  *
@@ -25,7 +25,7 @@ import modelo.Premio;
 public class JugadorJpaController implements Serializable {
 
     public JugadorJpaController() {
-       this.emf = Persistence.createEntityManagerFactory("juegoPreguntasPU");
+          this.emf = Persistence.createEntityManagerFactory("juegoPreguntasPU");
     }
     private EntityManagerFactory emf = null;
 
@@ -38,15 +38,15 @@ public class JugadorJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Premio idPremio = jugador.getIdPremio();
-            if (idPremio != null) {
-                idPremio = em.getReference(idPremio.getClass(), idPremio.getIdPremio());
-                jugador.setIdPremio(idPremio);
+            Ronda idRonda = jugador.getIdRonda();
+            if (idRonda != null) {
+                idRonda = em.getReference(idRonda.getClass(), idRonda.getIdRonda());
+                jugador.setIdRonda(idRonda);
             }
             em.persist(jugador);
-            if (idPremio != null) {
-                idPremio.getJugadorList().add(jugador);
-                idPremio = em.merge(idPremio);
+            if (idRonda != null) {
+                idRonda.getJugadorList().add(jugador);
+                idRonda = em.merge(idRonda);
             }
             em.getTransaction().commit();
         } finally {
@@ -62,20 +62,20 @@ public class JugadorJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Jugador persistentJugador = em.find(Jugador.class, jugador.getIdJugador());
-            Premio idPremioOld = persistentJugador.getIdPremio();
-            Premio idPremioNew = jugador.getIdPremio();
-            if (idPremioNew != null) {
-                idPremioNew = em.getReference(idPremioNew.getClass(), idPremioNew.getIdPremio());
-                jugador.setIdPremio(idPremioNew);
+            Ronda idRondaOld = persistentJugador.getIdRonda();
+            Ronda idRondaNew = jugador.getIdRonda();
+            if (idRondaNew != null) {
+                idRondaNew = em.getReference(idRondaNew.getClass(), idRondaNew.getIdRonda());
+                jugador.setIdRonda(idRondaNew);
             }
             jugador = em.merge(jugador);
-            if (idPremioOld != null && !idPremioOld.equals(idPremioNew)) {
-                idPremioOld.getJugadorList().remove(jugador);
-                idPremioOld = em.merge(idPremioOld);
+            if (idRondaOld != null && !idRondaOld.equals(idRondaNew)) {
+                idRondaOld.getJugadorList().remove(jugador);
+                idRondaOld = em.merge(idRondaOld);
             }
-            if (idPremioNew != null && !idPremioNew.equals(idPremioOld)) {
-                idPremioNew.getJugadorList().add(jugador);
-                idPremioNew = em.merge(idPremioNew);
+            if (idRondaNew != null && !idRondaNew.equals(idRondaOld)) {
+                idRondaNew.getJugadorList().add(jugador);
+                idRondaNew = em.merge(idRondaNew);
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -106,10 +106,10 @@ public class JugadorJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The jugador with id " + id + " no longer exists.", enfe);
             }
-            Premio idPremio = jugador.getIdPremio();
-            if (idPremio != null) {
-                idPremio.getJugadorList().remove(jugador);
-                idPremio = em.merge(idPremio);
+            Ronda idRonda = jugador.getIdRonda();
+            if (idRonda != null) {
+                idRonda.getJugadorList().remove(jugador);
+                idRonda = em.merge(idRonda);
             }
             em.remove(jugador);
             em.getTransaction().commit();

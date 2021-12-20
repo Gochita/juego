@@ -40,31 +40,21 @@ public class Jugador implements Serializable {
     @Basic(optional = false)
     @Column(name = "idJugador")
     private Integer idJugador;
-    @Basic(optional = false)
     @Column(name = "nombreJugador")
     private String nombreJugador;
-    @Basic(optional = false)
     @Column(name = "estadoJugador")
-    private int estadoJugador;
-    @Basic(optional = false)
+    private Integer estadoJugador;
     @Column(name = "acumuladoPremio")
-    private int acumuladoPremio;
-    @JoinColumn(name = "idPremio", referencedColumnName = "idPremio")
-    @ManyToOne(optional = false)
-    private Premio idPremio;
+    private Integer acumuladoPremio;
+    @JoinColumn(name = "idRonda", referencedColumnName = "idRonda")
+    @ManyToOne
+    private Ronda idRonda;
 
     public Jugador() {
     }
 
     public Jugador(Integer idJugador) {
         this.idJugador = idJugador;
-    }
-
-    public Jugador(Integer idJugador, String nombreJugador, int estadoJugador, int acumuladoPremio) {
-        this.idJugador = idJugador;
-        this.nombreJugador = nombreJugador;
-        this.estadoJugador = estadoJugador;
-        this.acumuladoPremio = acumuladoPremio;
     }
 
     public Integer getIdJugador() {
@@ -83,28 +73,28 @@ public class Jugador implements Serializable {
         this.nombreJugador = nombreJugador;
     }
 
-    public int getEstadoJugador() {
+    public Integer getEstadoJugador() {
         return estadoJugador;
     }
 
-    public void setEstadoJugador(int estadoJugador) {
+    public void setEstadoJugador(Integer estadoJugador) {
         this.estadoJugador = estadoJugador;
     }
 
-    public int getAcumuladoPremio() {
+    public Integer getAcumuladoPremio() {
         return acumuladoPremio;
     }
 
-    public void setAcumuladoPremio(int acumuladoPremio) {
+    public void setAcumuladoPremio(Integer acumuladoPremio) {
         this.acumuladoPremio = acumuladoPremio;
     }
 
-    public Premio getIdPremio() {
-        return idPremio;
+    public Ronda getIdRonda() {
+        return idRonda;
     }
 
-    public void setIdPremio(Premio idPremio) {
-        this.idPremio = idPremio;
+    public void setIdRonda(Ronda idRonda) {
+        this.idRonda = idRonda;
     }
 
     @Override
@@ -129,7 +119,7 @@ public class Jugador implements Serializable {
 
     @Override
     public String toString() {
-        return "juegopreguntas.modelo.Jugador[ idJugador=" + idJugador + " ]";
+        return "entidades.Jugador[ idJugador=" + idJugador + " ]";
     }
     
 }

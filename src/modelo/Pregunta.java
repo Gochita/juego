@@ -129,7 +129,7 @@ public class Pregunta implements Serializable {
 
     @Override
     public String toString() {
-        return "juegopreguntas.modelo.Pregunta[ idPregunta=" + idPregunta + " ]";
+        return "entidades.Pregunta[ idPregunta=" + idPregunta + " ]";
     }
     
 }

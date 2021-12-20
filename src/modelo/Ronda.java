@@ -40,8 +40,8 @@ public class Ronda implements Serializable {
     @Basic(optional = false)
     @Column(name = "numRonda")
     private int numRonda;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "numRonda")
-    private List<Premio> premioList;
+    @OneToMany(mappedBy = "idRonda")
+    private List<Jugador> jugadorList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idRonda")
     private List<Pregunta> preguntaList;
 
@@ -74,12 +74,12 @@ public class Ronda implements Serializable {
     }
 
     @XmlTransient
-    public List<Premio> getPremioList() {
-        return premioList;
+    public List<Jugador> getJugadorList() {
+        return jugadorList;
     }
 
-    public void setPremioList(List<Premio> premioList) {
-        this.premioList = premioList;
+    public void setJugadorList(List<Jugador> jugadorList) {
+        this.jugadorList = jugadorList;
     }
 
     @XmlTransient
@@ -113,7 +113,7 @@ public class Ronda implements Serializable {
 
     @Override
     public String toString() {
-        return "juegopreguntas.modelo.Ronda[ idRonda=" + idRonda + " ]";
+        return "entidades.Ronda[ idRonda=" + idRonda + " ]";
     }
     
 }

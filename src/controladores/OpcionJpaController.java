@@ -3,20 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controlador;
+package controladores;
 
-import controlador.exceptions.NonexistentEntityException;
+import controladores.exceptions.NonexistentEntityException;
+import modelo.Opcion;
 import java.io.Serializable;
+import javax.persistence.Query;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import modelo.Pregunta;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Query;
-import javax.persistence.EntityNotFoundException;
 import javax.persistence.Persistence;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import modelo.Opcion;
-import modelo.Pregunta;
 
 /**
  *
@@ -25,7 +25,7 @@ import modelo.Pregunta;
 public class OpcionJpaController implements Serializable {
 
     public OpcionJpaController() {
-        this.emf = Persistence.createEntityManagerFactory("juegoPreguntasPU");
+         this.emf = Persistence.createEntityManagerFactory("juegoPreguntasPU");
     }
     private EntityManagerFactory emf = null;
 

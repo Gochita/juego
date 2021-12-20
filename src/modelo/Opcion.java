@@ -116,7 +116,7 @@ public class Opcion implements Serializable {
 
     @Override
     public String toString() {
-        return "juegopreguntas.modelo.Opcion[ idOpcion=" + idOpcion + " ]";
+        return "entidades.Opcion[ idOpcion=" + idOpcion + " ]";
     }
     
 }

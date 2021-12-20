@@ -118,7 +118,7 @@ public class Categoria implements Serializable {
 
     @Override
     public String toString() {
-        return "juegopreguntas.modelo.Categoria[ idCategoria=" + idCategoria + " ]";
+        return "entidades.Categoria[ idCategoria=" + idCategoria + " ]";
     }
     
 }

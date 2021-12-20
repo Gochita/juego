@@ -3,17 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controlador;
+package controladores;
 
-import controlador.exceptions.IllegalOrphanException;
-import controlador.exceptions.NonexistentEntityException;
-import controlador.exceptions.PreexistingEntityException;
+import controladores.exceptions.IllegalOrphanException;
+import controladores.exceptions.NonexistentEntityException;
+import controladores.exceptions.PreexistingEntityException;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import modelo.Premio;
+import modelo.Jugador;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -29,7 +29,7 @@ import modelo.Ronda;
 public class RondaJpaController implements Serializable {
 
     public RondaJpaController() {
-        this.emf = Persistence.createEntityManagerFactory("juegoPreguntasPU");
+          this.emf = Persistence.createEntityManagerFactory("juegoPreguntasPU");
     }
     private EntityManagerFactory emf = null;
 
@@ -38,8 +38,8 @@ public class RondaJpaController implements Serializable {
     }
 
     public void create(Ronda ronda) throws PreexistingEntityException, Exception {
-        if (ronda.getPremioList() == null) {
-            ronda.setPremioList(new ArrayList<Premio>());
+        if (ronda.getJugadorList() == null) {
+            ronda.setJugadorList(new ArrayList<Jugador>());
         }
         if (ronda.getPreguntaList() == null) {
             ronda.setPreguntaList(new ArrayList<Pregunta>());
@@ -48,12 +48,12 @@ public class RondaJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            List<Premio> attachedPremioList = new ArrayList<Premio>();
-            for (Premio premioListPremioToAttach : ronda.getPremioList()) {
-                premioListPremioToAttach = em.getReference(premioListPremioToAttach.getClass(), premioListPremioToAttach.getIdPremio());
-                attachedPremioList.add(premioListPremioToAttach);
+            List<Jugador> attachedJugadorList = new ArrayList<Jugador>();
+            for (Jugador jugadorListJugadorToAttach : ronda.getJugadorList()) {
+                jugadorListJugadorToAttach = em.getReference(jugadorListJugadorToAttach.getClass(), jugadorListJugadorToAttach.getIdJugador());
+                attachedJugadorList.add(jugadorListJugadorToAttach);
             }
-            ronda.setPremioList(attachedPremioList);
+            ronda.setJugadorList(attachedJugadorList);
             List<Pregunta> attachedPreguntaList = new ArrayList<Pregunta>();
             for (Pregunta preguntaListPreguntaToAttach : ronda.getPreguntaList()) {
                 preguntaListPreguntaToAttach = em.getReference(preguntaListPreguntaToAttach.getClass(), preguntaListPreguntaToAttach.getIdPregunta());
@@ -61,13 +61,13 @@ public class RondaJpaController implements Serializable {
             }
             ronda.setPreguntaList(attachedPreguntaList);
             em.persist(ronda);
-            for (Premio premioListPremio : ronda.getPremioList()) {
-                Ronda oldNumRondaOfPremioListPremio = premioListPremio.getNumRonda();
-                premioListPremio.setNumRonda(ronda);
-                premioListPremio = em.merge(premioListPremio);
-                if (oldNumRondaOfPremioListPremio != null) {
-                    oldNumRondaOfPremioListPremio.getPremioList().remove(premioListPremio);
-                    oldNumRondaOfPremioListPremio = em.merge(oldNumRondaOfPremioListPremio);
+            for (Jugador jugadorListJugador : ronda.getJugadorList()) {
+                Ronda oldIdRondaOfJugadorListJugador = jugadorListJugador.getIdRonda();
+                jugadorListJugador.setIdRonda(ronda);
+                jugadorListJugador = em.merge(jugadorListJugador);
+                if (oldIdRondaOfJugadorListJugador != null) {
+                    oldIdRondaOfJugadorListJugador.getJugadorList().remove(jugadorListJugador);
+                    oldIdRondaOfJugadorListJugador = em.merge(oldIdRondaOfJugadorListJugador);
                 }
             }
             for (Pregunta preguntaListPregunta : ronda.getPreguntaList()) {
@@ -98,19 +98,11 @@ public class RondaJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Ronda persistentRonda = em.find(Ronda.class, ronda.getIdRonda());
-            List<Premio> premioListOld = persistentRonda.getPremioList();
-            List<Premio> premioListNew = ronda.getPremioList();
+            List<Jugador> jugadorListOld = persistentRonda.getJugadorList();
+            List<Jugador> jugadorListNew = ronda.getJugadorList();
             List<Pregunta> preguntaListOld = persistentRonda.getPreguntaList();
             List<Pregunta> preguntaListNew = ronda.getPreguntaList();
             List<String> illegalOrphanMessages = null;
-            for (Premio premioListOldPremio : premioListOld) {
-                if (!premioListNew.contains(premioListOldPremio)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain Premio " + premioListOldPremio + " since its numRonda field is not nullable.");
-                }
-            }
             for (Pregunta preguntaListOldPregunta : preguntaListOld) {
                 if (!preguntaListNew.contains(preguntaListOldPregunta)) {
                     if (illegalOrphanMessages == null) {
@@ -122,13 +114,13 @@ public class RondaJpaController implements Serializable {
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            List<Premio> attachedPremioListNew = new ArrayList<Premio>();
-            for (Premio premioListNewPremioToAttach : premioListNew) {
-                premioListNewPremioToAttach = em.getReference(premioListNewPremioToAttach.getClass(), premioListNewPremioToAttach.getIdPremio());
-                attachedPremioListNew.add(premioListNewPremioToAttach);
+            List<Jugador> attachedJugadorListNew = new ArrayList<Jugador>();
+            for (Jugador jugadorListNewJugadorToAttach : jugadorListNew) {
+                jugadorListNewJugadorToAttach = em.getReference(jugadorListNewJugadorToAttach.getClass(), jugadorListNewJugadorToAttach.getIdJugador());
+                attachedJugadorListNew.add(jugadorListNewJugadorToAttach);
             }
-            premioListNew = attachedPremioListNew;
-            ronda.setPremioList(premioListNew);
+            jugadorListNew = attachedJugadorListNew;
+            ronda.setJugadorList(jugadorListNew);
             List<Pregunta> attachedPreguntaListNew = new ArrayList<Pregunta>();
             for (Pregunta preguntaListNewPreguntaToAttach : preguntaListNew) {
                 preguntaListNewPreguntaToAttach = em.getReference(preguntaListNewPreguntaToAttach.getClass(), preguntaListNewPreguntaToAttach.getIdPregunta());
@@ -137,14 +129,20 @@ public class RondaJpaController implements Serializable {
             preguntaListNew = attachedPreguntaListNew;
             ronda.setPreguntaList(preguntaListNew);
             ronda = em.merge(ronda);
-            for (Premio premioListNewPremio : premioListNew) {
-                if (!premioListOld.contains(premioListNewPremio)) {
-                    Ronda oldNumRondaOfPremioListNewPremio = premioListNewPremio.getNumRonda();
-                    premioListNewPremio.setNumRonda(ronda);
-                    premioListNewPremio = em.merge(premioListNewPremio);
-                    if (oldNumRondaOfPremioListNewPremio != null && !oldNumRondaOfPremioListNewPremio.equals(ronda)) {
-                        oldNumRondaOfPremioListNewPremio.getPremioList().remove(premioListNewPremio);
-                        oldNumRondaOfPremioListNewPremio = em.merge(oldNumRondaOfPremioListNewPremio);
+            for (Jugador jugadorListOldJugador : jugadorListOld) {
+                if (!jugadorListNew.contains(jugadorListOldJugador)) {
+                    jugadorListOldJugador.setIdRonda(null);
+                    jugadorListOldJugador = em.merge(jugadorListOldJugador);
+                }
+            }
+            for (Jugador jugadorListNewJugador : jugadorListNew) {
+                if (!jugadorListOld.contains(jugadorListNewJugador)) {
+                    Ronda oldIdRondaOfJugadorListNewJugador = jugadorListNewJugador.getIdRonda();
+                    jugadorListNewJugador.setIdRonda(ronda);
+                    jugadorListNewJugador = em.merge(jugadorListNewJugador);
+                    if (oldIdRondaOfJugadorListNewJugador != null && !oldIdRondaOfJugadorListNewJugador.equals(ronda)) {
+                        oldIdRondaOfJugadorListNewJugador.getJugadorList().remove(jugadorListNewJugador);
+                        oldIdRondaOfJugadorListNewJugador = em.merge(oldIdRondaOfJugadorListNewJugador);
                     }
                 }
             }
@@ -189,13 +187,6 @@ public class RondaJpaController implements Serializable {
                 throw new NonexistentEntityException("The ronda with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            List<Premio> premioListOrphanCheck = ronda.getPremioList();
-            for (Premio premioListOrphanCheckPremio : premioListOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Ronda (" + ronda + ") cannot be destroyed since the Premio " + premioListOrphanCheckPremio + " in its premioList field has a non-nullable numRonda field.");
-            }
             List<Pregunta> preguntaListOrphanCheck = ronda.getPreguntaList();
             for (Pregunta preguntaListOrphanCheckPregunta : preguntaListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
@@ -205,6 +196,11 @@ public class RondaJpaController implements Serializable {
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
+            }
+            List<Jugador> jugadorList = ronda.getJugadorList();
+            for (Jugador jugadorListJugador : jugadorList) {
+                jugadorListJugador.setIdRonda(null);
+                jugadorListJugador = em.merge(jugadorListJugador);
             }
             em.remove(ronda);
             em.getTransaction().commit();

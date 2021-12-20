@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controlador;
+package controladores;
 
-import controlador.exceptions.IllegalOrphanException;
-import controlador.exceptions.NonexistentEntityException;
+import controladores.exceptions.IllegalOrphanException;
+import controladores.exceptions.NonexistentEntityException;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
@@ -15,12 +15,12 @@ import javax.persistence.criteria.Root;
 import modelo.Categoria;
 import modelo.Ronda;
 import modelo.Opcion;
+import modelo.Pregunta;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import modelo.Pregunta;
 
 /**
  *
@@ -29,7 +29,7 @@ import modelo.Pregunta;
 public class PreguntaJpaController implements Serializable {
 
     public PreguntaJpaController() {
-       this.emf = Persistence.createEntityManagerFactory("juegoPreguntasPU");
+          this.emf = Persistence.createEntityManagerFactory("juegoPreguntasPU");
     }
     private EntityManagerFactory emf = null;
 
